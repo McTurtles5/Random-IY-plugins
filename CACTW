@@ -4,13 +4,13 @@ local RS = game:GetService("RunService")
 function ge() return getgenv() end
 
 local isoparts = {
-    ["white"] = workspace.WhiteZone.Lock.Part,
-    ["red"] = workspace.RedZone.Lock.Part,
-    ["black"] = workspace.BlackZone.Lock.Part,
-    ["blue"] = workspace.BlueZone.Lock.Part,
-    ["green"] = workspace.GreenZone.Lock.Part,
-    ["magenta"] = workspace.MagentaZone.Lock.Part,
-    ["yellow"] = workspace.YellowZone.Lock.Part
+    ["white"] = workspace.WhiteZone,
+    ["red"] = workspace["Really redZone"],
+    ["black"] = workspace.BlackZone,
+    ["blue"] = workspace["Really blueZone"],
+    ["green"] = workspace.Camo.Lock.Part,
+    ["magenta"] = workspace.MagentaZone,
+    ["yellow"] = workspace["New YellerZone"]
 }
 
 local function BindRender(name, func, con)
@@ -44,7 +44,9 @@ end
 
 function isocol(col)
     for _, isop in pairs(isoparts) do
-        isop.CanCollide = col
+        if isop:FindFirstChild("Lock") and isop.Lock:FindFirstChild("Part") then
+            isop.Lock.Part.CanCollide = col
+        end
     end
 end
 
@@ -72,3 +74,5 @@ CACTW = {
         }
     }
 }
+
+return CACTW
