@@ -8,7 +8,7 @@ local isoparts = {
     ["red"] = workspace["Really redZone"],
     ["black"] = workspace.BlackZone,
     ["blue"] = workspace["Really blueZone"],
-    ["green"] = workspace.CamoZone.Lock.Part,
+    ["green"] = workspace.CamoZone,
     ["magenta"] = workspace.MagentaZone,
     ["yellow"] = workspace["New YellerZone"]
 }
