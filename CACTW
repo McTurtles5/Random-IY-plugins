@@ -1,10 +1,11 @@
 -- Code a cheta to win (WIP)
 
 local RS = game:GetService("RunService")
+local plr = Players.LocalPlayer
 function ge() return getgenv() end
 
-ge().CACTWdata = {}
-ge().CACTWdata.RenderConnections = {}
+ge().CACTWdata = ge().CACTWdata or {}
+ge().CACTWdata.RenderConnections = ge().CACTWdata.RenderConnections or {}
 
 local isoparts = {
     ["white"] = workspace.WhiteZone,
@@ -53,6 +54,25 @@ function isocol(col)
     end
 end
 
+function isopartadded(fol)
+    if fol:IsA("Folder") and fol.Name == "Lock" then
+        local root = getRoot(plr.Character)
+        local pos = nil
+        if root then
+            pos = root.CFrame
+        end
+        plr.CharacterAdded:Wait()
+        root = getRoot(plr.Character)
+        if root and pos then
+            root.CFrame = pos
+        end
+    end
+end
+
+for _, isopart in pairs(isoparts) do
+    isopart.ChildAdded:Connect(isopartadded)
+end
+
 CACTW = {
     ["PluginName"] = "CACTW",
     ["PluginDescription"] = "Code a cheat to win, for 'build a boat'",
@@ -62,7 +82,6 @@ CACTW = {
             ["Description"] = "Isolation mode does not affect you",
             ["Aliases"] = {"antiiso"},
             ["Function"] = function(args, speaker)
-                print(pcall(function()
                 local arg = tostring(args[1]):lower()
                 if arg == "on" then
                     RebindRender("ANTI_ISO", function()
@@ -76,7 +95,6 @@ CACTW = {
                 else
                     notify("Invalid argument. Do (on/off)")
                 end
-            end))
             end
         }
     }
