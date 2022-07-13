@@ -3,6 +3,9 @@
 local RS = game:GetService("RunService")
 function ge() return getgenv() end
 
+ge().CACTWdata = {}
+ge().CACTWdata.RenderConnections = {}
+
 local isoparts = {
     ["white"] = workspace.WhiteZone,
     ["red"] = workspace["Really redZone"],
