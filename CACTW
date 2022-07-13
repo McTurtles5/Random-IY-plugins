@@ -3,16 +3,26 @@
 local RS = game:GetService("RunService")
 function ge() return getgenv() end
 
+local isoparts = {
+    ["white"] = workspace.WhiteZone.Lock.Part,
+    ["red"] = workspace.RedZone.Lock.Part,
+    ["black"] = workspace.BlackZone.Lock.Part,
+    ["blue"] = workspace.BlueZone.Lock.Part,
+    ["green"] = workspace.GreenZone.Lock.Part,
+    ["magenta"] = workspace.MagentaZone.Lock.Part,
+    ["yellow"] = workspace.YellowZone.Lock.Part
+}
+
 local function BindRender(name, func, con)
 	con = con or RS.RenderStepped
 	table.insert(ge().CACTWdata.RenderConnections, {["Name"] = name, ["Connection"] = con:Connect(func)})
 end
 
 local function UnbindRender(name)
-	for i, connection in pairs(ge().PLCdata.RenderConnections) do
+	for i, connection in pairs(ge().CACTWdata.RenderConnections) do
 		if connection.Name == name then
 			connection.Connection:Disconnect()
-			table.remove(ge().PLCdata.RenderConnections, i)
+			table.remove(ge().CACTWdata.RenderConnections, i)
 		end
 	end
 end
@@ -24,7 +34,7 @@ end
 
 local function IsRender(name)
 	local counted = 0
-	for i, connection in pairs(ge().PLCdata.RenderConnections) do
+	for i, connection in pairs(ge().CACTWdata.RenderConnections) do
 		if connection.Name == name then
 			counted = counted + 1
 		end
@@ -32,9 +42,15 @@ local function IsRender(name)
 	return counted > 0, counted
 end
 
+function isocol(col)
+    for _, isop in pairs(isoparts) do
+        isop.CanCollide = col
+    end
+end
+
 CACTW = {
     ["PluginName"] = "CACTW",
-    ["PluginDescription"] = "Code a cheat to win",
+    ["PluginDescription"] = "Code a cheat to win, for 'build a boat'",
     ["Commands"] = {
         ["antiisolation"] = {
             ["ListName"] = "antiisolation / antiiso [on/off]",
@@ -43,9 +59,12 @@ CACTW = {
             ["Function"] = function(args, speaker)
                 local arg = tostring(args[1]):lower()
                 if arg == "on" then
-
+                    RebindRender("ANTI_ISO", function()
+                        isocol(false)
+                    end, RS.Stepped)
                 elseif arg == "off" then
-                    
+                    UnbindRender("ANTI_ISO")
+                    isocol(true)
                 else
                     notify("Invalid argument. Do (on/off)")
                 end
