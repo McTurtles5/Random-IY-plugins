@@ -59,17 +59,21 @@ CACTW = {
             ["Description"] = "Isolation mode does not affect you",
             ["Aliases"] = {"antiiso"},
             ["Function"] = function(args, speaker)
+                print(pcall(function()
                 local arg = tostring(args[1]):lower()
                 if arg == "on" then
                     RebindRender("ANTI_ISO", function()
                         isocol(false)
                     end, RS.Stepped)
+                    notify("Anti-iso", "Anti-iso was turned enabled")
                 elseif arg == "off" then
                     UnbindRender("ANTI_ISO")
                     isocol(true)
+                    notify("Anti-iso", "Anti-iso was turned disabled")
                 else
                     notify("Invalid argument. Do (on/off)")
                 end
+            end))
             end
         }
     }
