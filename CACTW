@@ -54,25 +54,49 @@ function isocol(col)
     end
 end
 
+function respawn()
+    local root = getRoot(plr.Character)
+    local pos = nil
+    if root then
+    pos = root.CFrame
+    end
+    plr.CharacterAdded:Wait():WaitForChild("HumanoidRootPart")
+    root = getRoot(plr.Character)
+    if root and pos then
+        root.CFrame = pos
+    end
+end
+
 function isopartadded(fol)
     if fol:IsA("Folder") and fol.Name == "Lock" then
-        local root = getRoot(plr.Character)
-        local pos = nil
-        if root then
-            pos = root.CFrame
-        end
-        plr.CharacterAdded:Wait():WaitForChild("HumanoidRootPart")
-        print(pos)
-        root = getRoot(plr.Character)
-        print(root)
-        if root and pos then
-            root.CFrame = pos
-        end
+        respawn()
     end
 end
 
 for _, isopart in pairs(isoparts) do
     isopart.ChildAdded:Connect(isopartadded)
+end
+
+function hasiso(team)
+    local part = isoparts[team.Name]
+    if part:FindFirstChild("Lock") then
+        return true
+    end
+end
+
+function hookplr(Plr)
+    Plr.CharactedAdded:Cnnection(function()
+        if Plr ~= plr and Plr.Team ~ plr.Team and Plr.Team then
+            if hasiso(plr.Team) then
+                respawn()
+            end
+        end
+    end)
+end
+
+Players.PlayerAdded:connect(hookplr)
+for _, Plr in pairs(Players:GetPlayers()) do
+    hookplr(Plr)
 end
 
 CACTW = {
