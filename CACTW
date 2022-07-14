@@ -55,14 +55,13 @@ function isocol(col)
 end
 
 function isopartadded(fol)
-    print(fol.ClassName, fol.Name)
     if fol:IsA("Folder") and fol.Name == "Lock" then
         local root = getRoot(plr.Character)
         local pos = nil
         if root then
             pos = root.CFrame
         end
-        plr.CharacterAdded:Wait()
+        plr.CharacterAdded:Wait():WaitForChild("HumanoidRootPart")
         print(pos)
         root = getRoot(plr.Character)
         print(root)
